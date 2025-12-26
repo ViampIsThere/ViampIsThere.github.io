@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant Lineups</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Anton&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Couleurs de Valo */
+            --valorant-red: #ff4655;
+            --valorant-dark: #0f1923;
+            --valorant-light: #ece8e1;
+            --valorant-gray: #768079;
+            --valorant-black: #111111;
+            --valorant-white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--valorant-dark);
+            color: var(--valorant-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(15, 25, 35, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--valorant-red);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--valorant-red);
+            font-size: 28px;
+        }
+        
+        .logo-text {
+            font-family: 'Anton', sans-serif;
+            font-size: 24px;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--valorant-light), var(--valorant-red));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--valorant-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--valorant-red);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--valorant-light);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(rgba(15, 25, 35, 0.9), rgba(15, 25, 35, 0.9)), 
+                        url('https://images.unsplash.com/photo-1620336655055-bd87c7d33ef0?q=80&w=1470&auto=format&fit=crop') no-repeat center center/cover;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 4rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .hero h1 span {
+            color: var(--valorant-red);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--valorant-gray);
+        }
+        
+        /* Étape de sélection */
+        .selection-step {
+            padding: 80px 0;
+            display: none;
+        }
+        
+        .selection-step.active {
+            display: block;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            gap: 20px;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--valorant-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .step.active .step-circle {
+            background-color: var(--valorant-red);
+            transform: scale(1.1);
+        }
+        
+        .step.completed .step-circle {
+            background-color: var(--valorant-red);
+            opacity: 0.7;
+        }
+        
+        .step.completed .step-circle::after {
+            content: '✓';
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 25px;
+            left: calc(100% + 10px);
+            width: 40px;
+            height: 2px;
+            background-color: var(--valorant-gray);
+        }
+        
+        .step:last-child .step-line {
+            display: none;
+        }
+        
+        .step.active .step-line {
+            background-color: var(--valorant-red);
+        }
+        
+        .step-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Agents Section */
+        .section-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background-color: var(--valorant-red);
+            margin: 10px auto;
+        }
+        
+        .agents-grid, .maps-grid, .side-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .agent-card, .map-card, .side-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            border: 1px solid rgba(255, 70, 85, 0.2);
+            cursor: pointer;
+        }
+        
+        .agent-card:hover, .map-card:hover, .side-card:hover,
+        .agent-card.selected, .map-card.selected, .side-card.selected {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 70, 85, 0.2);
+            border-color: var(--valorant-red);
+        }
+        
+        .agent-img, .map-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .agent-info, .map-info, .side-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .agent-name, .map-name, .side-name {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--valorant-white);
+        }
+        
+        .agent-role {
+            display: inline-block;
+            background-color: var(--valorant-red);
+            color: var(--valorant-white);
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        .side-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .attack-icon {
+            color: #ff4655;
+        }
+        
+        .defense-icon {
+            color: #0f8bff;
+        }
+        
+        .selection-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .selection-btn {
+            background-color: transparent;
+            color: var(--valorant-light);
+            border: 2px solid var(--valorant-gray);
+            padding: 12px 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .selection-btn:hover {
+            border-color: var(--valorant-red);
+            color: var(--valorant-red);
+        }
+        
+        .selection-btn.primary {
+            background-color: var(--valorant-red);
+            color: var(--valorant-white);
+            border-color: var(--valorant-red);
+        }
+        
+        .selection-btn.primary:hover {
+            background-color: #ff2e3f;
+        }
+        
+        .selection-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .selection-btn:disabled:hover {
+            border-color: var(--valorant-gray);
+            color: var(--valorant-light);
+        }
+        
+        /* Résultats Section */
+        .results-section {
+            padding: 100px 0;
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .selection-summary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 70, 85, 0.2);
+        }
+        
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            color: var(--valorant-gray);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .summary-value {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            color: var(--valorant-white);
+        }
+        
+        .summary-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .lineups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .lineup-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 70, 85, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .lineup-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--valorant-red);
+        }
+        
+        .lineup-video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .lineup-info {
+            padding: 20px;
+        }
+        
+        .lineup-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--valorant-white);
+        }
+        
+        .lineup-desc {
+            color: var(--valorant-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .lineup-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--valorant-gray);
+        }
+        
+        .no-lineups {
+            text-align: center;
+            padding: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 70, 85, 0.2);
+        }
+        
+        .no-lineups p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--valorant-black);
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--valorant-red);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--valorant-white);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--valorant-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--valorant-red);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            color: var(--valorant-gray);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--valorant-red);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--valorant-gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .agents-grid, .maps-grid, .side-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--valorant-dark);
+                flex-direction: column;
+                padding: 20px;
+                text-align: center;
+                border-top: 1px solid var(--valorant-red);
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .step-indicator {
+                gap: 10px;
+            }
+            
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .step-line {
+                width: 20px;
+            }
+            
+            .step-title {
+                font-size: 0.8rem;
+            }
+            
+            .selection-summary {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero {
+                padding: 150px 0 70px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .lineups-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .agents-grid, .maps-grid, .side-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-crosshairs"></i></div>
+                <div class="logo-text">VALORANT LINEUPS</div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home" class="active">Accueil</a></li>
+                    <li><a href="#selection" id="navSelection">Sélection</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1> VALORANT <span>LINEUPS</span></h1>
+            <p>by Viamp</p>
+            <button class="cta-button" id="startSelection">Accueil</button>
+        </div>
+    </section>
+
+    <!-- Sélection Étape 1: Agents -->
+    <section class="selection-step active" id="step-agents">
+        <div class="container">
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Agent</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Carte</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Côté</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Choisissez un Agent</h2>
+            <div class="agents-grid" id="agentsGrid">
+                <!-- Les cartes d'agents seront générées par JavaScript -->
+            </div>
+            
+            <div class="selection-actions">
+                <button class="selection-btn" id="prevBtn" disabled>Précédent</button>
+                <button class="selection-btn primary" id="nextBtn" disabled>Suivant</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sélection Étape 2: Cartes -->
+    <section class="selection-step" id="step-maps">
+        <div class="container">
+            <div class="step-indicator">
+                <div class="step completed" id="step1-completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Agent</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step active" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Carte</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Côté</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Choisissez une Carte</h2>
+            <div class="maps-grid" id="mapsGrid">
+                <!-- Les cartes de maps seront générées par JavaScript -->
+            </div>
+            
+            <div class="selection-actions">
+                <button class="selection-btn" id="prevBtn2">Précédent</button>
+                <button class="selection-btn primary" id="nextBtn2" disabled>Suivant</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sélection Étape 3: Attaque/Défense -->
+    <section class="selection-step" id="step-side">
+        <div class="container">
+            <div class="step-indicator">
+                <div class="step completed" id="step1-completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">Agent</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step completed" id="step2-completed">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">Carte</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="step active" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">Côté</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Choisissez un Côté</h2>
+            <div class="side-grid" id="sideGrid">
+                <div class="side-card" data-side="attack">
+                    <div class="side-info">
+                        <div class="side-icon attack-icon"><i class="fas fa-fist-raised"></i></div>
+                        <h3 class="side-name">Attaque</h3>
+                        <p>Lineups pour prendre le site, déloger les défenseurs et planter le spike</p>
+                    </div>
+                </div>
+                
+                <div class="side-card" data-side="defense">
+                    <div class="side-info">
+                        <div class="side-icon defense-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3 class="side-name">Défense</h3>
+                        <p>Lineups pour défendre le site, retarder l'attaque et désamorcer le spike</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="selection-actions">
+                <button class="selection-btn" id="prevBtn3">Précédent</button>
+                <button class="selection-btn primary" id="nextBtn3" disabled>Voir les Lineups</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Résultats -->
+    <section class="results-section" id="results">
+        <div class="container">
+            <h2 class="section-title">Lineups Recommandés</h2>
+            
+            <div class="selection-summary" id="selectionSummary">
+                <!-- Le résumé de sélection sera généré par JavaScript -->
+            </div>
+            
+            <div class="lineups-grid" id="lineupsGrid">
+                <!-- Les lineups seront générés par JavaScript -->
+            </div>
+            
+            <div class="selection-actions">
+                <button class="selection-btn" id="restartBtn">Nouvelle Sélection</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Valorant Lineups</h3>
+                    <p>Site pour les lineups by Viamp</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitch"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Navigation</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Accueil</a></li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Agents Disponibles</h3>
+                    <ul class="footer-links" id="footerAgents">
+                        <!-- Les agents seront ajoutés par JavaScript -->
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Maps Disponibles</h3>
+                    <ul class="footer-links" id="footerMaps">
+                        <!-- Les maps seront ajoutées par JavaScript -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>Valorant Lineups n'est PAS affilié à Riot Games :)  Valorant et Riot Games sont des marques déposées de Riot Games, Inc.</p>
+                <p>&copy;  Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Données pour les agents
+        const agents = [
+            { 
+                name: "Sova", 
+                role: "Initiateur", 
+                img: "https://wallpaperaccess.com/full/3779877.jpg",
+                description: "Reveal et Schock dart"
+            },
+            { 
+                name: "Brimstone", 
+                role: "Contrôleur", 
+                img: "https://wallpapercave.com/wp/wp7126669.png",
+                description: "Molly"
+            },
+            { 
+                name: "Viper", 
+                role: "Contrôleur", 
+                img: "https://wallpaperaccess.com/full/3976903.jpg",
+                description: "wall et smoke "
+            },
+            
+        
+           
+        ];
+
+        // Données pour les cartes
+        const maps = [
+            { 
+                name: "Ascent", 
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop"
+            },
+            { 
+                name: "Bind", 
+                img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1457&auto=format&fit=crop"
+            },
+            { 
+                name: "Haven", 
+                img: "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?q=80&w=1469&auto=format&fit=crop"
+            },
+            { 
+                name: "Split", 
+                img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1471&auto=format&fit=crop"
+            },
+            { 
+                name: "Icebox", 
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop"
+            },
+            { 
+                name: "Fracture", 
+                img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1457&auto=format&fit=crop"
+            }
+        ];
+
+        // Données pour les lineups
+        const lineups = [
+            { 
+                title: "Sova Flèche Recon A Site", 
+                agent: "Sova", 
+                map: "Ascent", 
+                side: "attack",
+                description: "Flèche de reconnaissance pour scanner tout le site A depuis le mid.",
+                difficulty: "Moyenne",
+                img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1457&auto=format&fit=crop"
+            },
+            { 
+                title: "Sova Choc Dart A Main", 
+                agent: "Sova", 
+                map: "Ascent", 
+                side: "attack",
+                description: "Choc dart pour dégager un ennemi qui se cache dans A Main.",
+                difficulty: "Facile",
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop"
+            },
+            { 
+                title: "Sova Recon Defense B Site", 
+                agent: "Sova", 
+                map: "Ascent", 
+                side: "defense",
+                description: "Flèche de reconnaissance pour scanner les attaquants qui push B.",
+                difficulty: "Facile",
+                img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1457&auto=format&fit=crop"
+            },
+            { 
+                title: "Brimstone Smoke B Main", 
+                agent: "Brimstone", 
+                map: "Bind", 
+                side: "attack",
+                description: "Smoke parfaite pour bloquer la vue depuis B Main vers le site.",
+                difficulty: "Facile",
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop"
+            },
+            { 
+                title: "Brimstone Molly A Short", 
+                agent: "Brimstone", 
+                map: "Bind", 
+                side: "attack",
+                description: "Molotov orbitale pour dégager A Short avant de push.",
+                difficulty: "Moyenne",
+                img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop"
+            },
+            { 
+                title: "Viper Molly A Heaven", 
+                agent: "Viper", 
+                map: "Haven", 
+                side: "attack",
+                description: "Molotov toxique pour déloger les ennemis de A Heaven.",
+                difficulty: "Difficile",
+                img: "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?q=80&w=1469&auto=format&fit=crop"
+            },
+            { 
+                title: "Viper Smoke C Long", 
+                agent: "Viper", 
+                map: "Haven", 
+                side: "defense",
+                description: "Smoke toxique pour bloquer la vue de C Long vers le site.",
+                difficulty: "Moyenne",
+                img: "https://images.unsplash.com/photo-1590077428593-a55bb07c4665?q=80&w=1469&auto=format&fit=crop"
+            }
+        ];
+
+        // État de la sélection
+        const selectionState = {
+            agent: null,
+            map: null,
+            side: null
+        };
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Génération des agents
+            const agentsGrid = document.getElementById('agentsGrid');
+            agents.forEach(agent => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'agent-card';
+                agentCard.dataset.agent = agent.name;
+                agentCard.innerHTML = `
+                    <img src="${agent.img}" alt="${agent.name}" class="agent-img">
+                    <div class="agent-info">
+                        <h3 class="agent-name">${agent.name}</h3>
+                        <span class="agent-role">${agent.role}</span>
+                        <p>${agent.description}</p>
+                    </div>
+                `;
+                agentsGrid.appendChild(agentCard);
+                
+                // Ajouter l'agent au footer
+                const footerAgents = document.getElementById('footerAgents');
+                const agentLink = document.createElement('li');
+                agentLink.innerHTML = `<a href="#" data-agent="${agent.name}">${agent.name}</a>`;
+                footerAgents.appendChild(agentLink);
+            });
+
+            // Génération des cartes
+            const mapsGrid = document.getElementById('mapsGrid');
+            maps.forEach(map => {
+                const mapCard = document.createElement('div');
+                mapCard.className = 'map-card';
+                mapCard.dataset.map = map.name;
+                mapCard.innerHTML = `
+                    <img src="${map.img}" alt="${map.name}" class="map-img">
+                    <div class="map-info">
+                        <h3 class="map-name">${map.name}</h3>
+                    </div>
+                `;
+                mapsGrid.appendChild(mapCard);
+                
+                // Ajouter la map au footer
+                const footerMaps = document.getElementById('footerMaps');
+                const mapLink = document.createElement('li');
+                mapLink.innerHTML = `<a href="#" data-map="${map.name}">${map.name}</a>`;
+                footerMaps.appendChild(mapLink);
+            });
+
+            // Navigation entre les étapes
+            const startBtn = document.getElementById('startSelection');
+            const nextBtn = document.getElementById('nextBtn');
+            const nextBtn2 = document.getElementById('nextBtn2');
+            const nextBtn3 = document.getElementById('nextBtn3');
+            const prevBtn = document.getElementById('prevBtn');
+            const prevBtn2 = document.getElementById('prevBtn2');
+            const prevBtn3 = document.getElementById('prevBtn3');
+            const restartBtn = document.getElementById('restartBtn');
+            
+            // Cacher toutes les étapes sauf la première
+            const steps = document.querySelectorAll('.selection-step');
+            const resultsSection = document.getElementById('results');
+            
+            // Fonction pour afficher une étape
+            function showStep(stepId) {
+                steps.forEach(step => {
+                    step.classList.remove('active');
+                });
+                resultsSection.classList.remove('active');
+                
+                document.getElementById(stepId).classList.add('active');
+                
+                // Mettre à jour la navigation
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.getElementById('navSelection').classList.add('active');
+                
+                // Scroll vers le haut
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Commencer la sélection
+            startBtn.addEventListener('click', () => {
+                showStep('step-agents');
+            });
+            
+            // Navigation dans le header et footer
+            document.getElementById('navSelection').addEventListener('click', (e) => {
+                e.preventDefault();
+                showStep('step-agents');
+            });
+            
+            document.getElementById('footerSelection').addEventListener('click', (e) => {
+                e.preventDefault();
+                showStep('step-agents');
+            });
+            
+            // Navigation entre les étapes
+            nextBtn.addEventListener('click', () => {
+                if (selectionState.agent) {
+                    showStep('step-maps');
+                }
+            });
+            
+            nextBtn2.addEventListener('click', () => {
+                if (selectionState.map) {
+                    showStep('step-side');
+                }
+            });
+            
+            nextBtn3.addEventListener('click', () => {
+                if (selectionState.side) {
+                    showResults();
+                }
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                showStep('step-agents');
+            });
+            
+            prevBtn2.addEventListener('click', () => {
+                showStep('step-agents');
+            });
+            
+            prevBtn3.addEventListener('click', () => {
+                showStep('step-maps');
+            });
+            
+            restartBtn.addEventListener('click', () => {
+                resetSelection();
+                showStep('step-agents');
+            });
+            
+            // Sélection d'un agent
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Retirer la sélection précédente
+                    document.querySelectorAll('.agent-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner cet agent
+                    this.classList.add('selected');
+                    selectionState.agent = this.dataset.agent;
+                    
+                    // Activer le bouton suivant
+                    nextBtn.disabled = false;
+                });
+            });
+            
+            // Sélection d'une carte
+            document.querySelectorAll('.map-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Retirer la sélection précédente
+                    document.querySelectorAll('.map-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner cette carte
+                    this.classList.add('selected');
+                    selectionState.map = this.dataset.map;
+                    
+                    // Activer le bouton suivant
+                    nextBtn2.disabled = false;
+                });
+            });
+            
+            // Sélection d'un côté
+            document.querySelectorAll('.side-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Retirer la sélection précédente
+                    document.querySelectorAll('.side-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Sélectionner ce côté
+                    this.classList.add('selected');
+                    selectionState.side = this.dataset.side;
+                    
+                    // Activer le bouton suivant
+                    nextBtn3.disabled = false;
+                });
+            });
+            
+            // Sélection rapide depuis le footer
+            document.querySelectorAll('#footerAgents a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const agent = this.dataset.agent;
+                    
+                    // Sélectionner l'agent
+                    selectionState.agent = agent;
+                    document.querySelectorAll('.agent-card').forEach(card => {
+                        card.classList.remove('selected');
+                        if (card.dataset.agent === agent) {
+                            card.classList.add('selected');
+                        }
+                    });
+                    
+                    // Aller à l'étape des agents
+                    showStep('step-agents');
+                    nextBtn.disabled = false;
+                });
+            });
+            
+            document.querySelectorAll('#footerMaps a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const map = this.dataset.map;
+                    
+                    // Sélectionner la map
+                    selectionState.map = map;
+                    document.querySelectorAll('.map-card').forEach(card => {
+                        card.classList.remove('selected');
+                        if (card.dataset.map === map) {
+                            card.classList.add('selected');
+                        }
+                    });
+                    
+                    // Aller à l'étape des maps
+                    showStep('step-maps');
+                    nextBtn2.disabled = false;
+                });
+            });
+            
+            // Navigation mobile
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                    ? '<i class="fas fa-times"></i>' 
+                    : '<i class="fas fa-bars"></i>';
+            });
+            
+            // Smooth scroll pour les liens d'ancrage
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Fermer le menu mobile s'il est ouvert
+                        navMenu.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        
+                        // Scroll vers l'élément
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Changer la couleur du header au scroll
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.backgroundColor = 'rgba(15, 25, 35, 0.98)';
+                } else {
+                    header.style.backgroundColor = 'rgba(15, 25, 35, 0.95)';
+                }
+            });
+        });
+        
+        // Fonction pour afficher les résultats
+        function showResults() {
+            // Cacher toutes les étapes
+            document.querySelectorAll('.selection-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Afficher la section des résultats
+            const resultsSection = document.getElementById('results');
+            resultsSection.classList.add('active');
+            
+            // Mettre à jour le résumé de sélection
+            const selectionSummary = document.getElementById('selectionSummary');
+            const sideText = selectionState.side === 'attack' ? 'Attaque' : 'Défense';
+            const sideIcon = selectionState.side === 'attack' ? 'fa-fist-raised' : 'fa-shield-alt';
+            const sideColor = selectionState.side === 'attack' ? '#ff4655' : '#0f8bff';
+            
+            selectionSummary.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Agent</div>
+                    <div class="summary-value">${selectionState.agent}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Carte</div>
+                    <div class="summary-value">${selectionState.map}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Côté</div>
+                    <div class="summary-icon" style="color: ${sideColor}"><i class="fas ${sideIcon}"></i></div>
+                    <div class="summary-value">${sideText}</div>
+                </div>
+            `;
+            
+            // Filtrer les lineups
+            const filteredLineups = lineups.filter(lineup => 
+                lineup.agent === selectionState.agent && 
+                lineup.map === selectionState.map && 
+                lineup.side === selectionState.side
+            );
+            
+            // Afficher les lineups
+            const lineupsGrid = document.getElementById('lineupsGrid');
+            lineupsGrid.innerHTML = '';
+            
+            if (filteredLineups.length > 0) {
+                filteredLineups.forEach(lineup => {
+                    const lineupCard = document.createElement('div');
+                    lineupCard.className = 'lineup-card';
+                    lineupCard.innerHTML = `
+                        <img src="${lineup.img}" alt="${lineup.title}" class="lineup-video">
+                        <div class="lineup-info">
+                            <h3 class="lineup-title">${lineup.title}</h3>
+                            <p class="lineup-desc">${lineup.description}</p>
+                            <div class="lineup-details">
+                                <span><i class="fas fa-signal"></i> Difficulté: ${lineup.difficulty}</span>
+                                <span><i class="fas fa-map-marker-alt"></i> ${lineup.map}</span>
+                            </div>
+                        </div>
+                    `;
+                    lineupsGrid.appendChild(lineupCard);
+                });
+            } else {
+                lineupsGrid.innerHTML = `
+                    <div class="no-lineups">
+                        <p>Aucun lineup trouvé pour cette combinaison.</p>
+                        <p>Essayez une autre combinaison d'agent, carte et côté.</p>
+                        <button class="selection-btn primary" id="tryAgainBtn">Essayer une autre combinaison</button>
+                    </div>
+                `;
+                
+                document.getElementById('tryAgainBtn').addEventListener('click', () => {
+                    resetSelection();
+                    showStep('step-agents');
+                });
+            }
+            
+            // Scroll vers le haut
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Fonction pour réinitialiser la sélection
+        function resetSelection() {
+            // Réinitialiser l'état
+            selectionState.agent = null;
+            selectionState.map = null;
+            selectionState.side = null;
+            
+            // Réinitialiser les sélections visuelles
+            document.querySelectorAll('.agent-card, .map-card, .side-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Désactiver les boutons
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn2').disabled = true;
+            document.getElementById('nextBtn3').disabled = true;
+        }
+    </script>
+</body>
+</html>
