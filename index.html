@@ -1,1 +1,550 @@
-test
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* MODIFIÉ : Style pour l'avatar avec image */
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Si pas d'image, on garde l'icône */
+        .avatar i {
+            color: white;
+            font-size: 60px;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #7f8c8d;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            padding: 18px 22px;
+            background-color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.25s ease;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+        }
+
+        /* Accent color pour chaque réseau */
+        .link-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            transition: width 0.2s ease;
+        }
+
+        .link-card:hover::before {
+            width: 6px;
+        }
+
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .link-card:hover .link-icon {
+            transform: scale(1.1);
+        }
+
+        .link-content {
+            flex-grow: 1;
+        }
+
+        .link-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .link-description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .link-arrow {
+            color: #bdc3c7;
+            font-size: 18px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .link-card:hover .link-arrow {
+            transform: translateX(3px);
+            color: #3498db;
+        }
+
+        /* Couleurs spécifiques */
+        .twitch-card::before {
+            background-color: #6441a5;
+        }
+        .twitch-icon {
+            background-color: #6441a5;
+        }
+
+        .youtube-card::before {
+            background-color: #ff0000;
+        }
+        .youtube-icon {
+            background-color: #ff0000;
+        }
+
+        .email-card::before {
+            background-color: #ea4335;
+        }
+        .email-icon {
+            background-color: #ea4335;
+        }
+
+        .discord-card::before {
+            background-color: #5865f2;
+        }
+        .discord-icon {
+            background-color: #5865f2;
+        }
+
+        /* Notification de copie d'email */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            width: 100%;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+
+        .social-info {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        /* Éléments décoratifs subtils */
+        .decorative-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .dot-1 {
+            top: 15%;
+            left: 10%;
+        }
+
+        .dot-2 {
+            top: 25%;
+            right: 15%;
+            background-color: #3498db;
+        }
+
+        .dot-3 {
+            bottom: 20%;
+            left: 20%;
+            background-color: #9b59b6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .avatar {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .link-card {
+                padding: 16px 20px;
+            }
+            
+            .copy-notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                transform: translateY(-150%);
+            }
+            
+            .copy-notification.show {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .link-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+            }
+            
+            .link-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .link-arrow {
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            
+            .social-info {
+                gap: 20px;
+            }
+        }
+
+        /* Animation subtile pour l'avatar */
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .avatar {
+            animation: gentle-pulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Points décoratifs subtils en arrière-plan -->
+    <div class="decorative-dot dot-1"></div>
+    <div class="decorative-dot dot-2"></div>
+    <div class="decorative-dot dot-3"></div>
+    
+    <!-- Notification de copie d'email -->
+    <div id="copyNotification" class="copy-notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Email copié dans le presse-papier !</span>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="profile">
+                <!-- CHOISISSEZ UNE OPTION CI-DESSOUS -->
+                
+                <!-- OPTION 1 : Si votre image est dans le même dossier -->
+                <div class="avatar">
+                    <img src="sovaaaaaaaaaaaaa.webp" alt="Ma photo">
+                </div>
+                
+                <!-- OPTION 2 : Si vous avez une URL en ligne -->
+                <!-- <div class="avatar">
+                    <img src="https://exemple.com/votre-image.jpg" alt="Ma photo">
+                </div> -->
+                
+                <!-- OPTION 3 : Si pas d'image (par défaut) -->
+                <!-- <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div> -->
+                
+                <h1>How did you get here ?</h1>
+                <p class="subtitle">My links down below</p>
+            </div>
+        </header>
+
+        <div class="links-container">
+            <!-- Twitch -->
+            <a href="https://www.twitch.tv/viamp_is_there" target="_blank" class="link-card twitch-card">
+                <div class="link-icon twitch-icon">
+                    <i class="fab fa-twitch"></i>
+                </div>
+                <div class="link-content">
+                    <div class="link-title">Twitch</div>
+                    <div class="link-description">I stream once every decade</div>
+                </div>
+                <div class="link-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- YouTube -->
+            <a href="https://www.youtube.com/@Viamp_XD" target="_blank" class="link-card youtube-card">
+                <div class="link-icon youtube-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <div class="link-content">
+                    <div class="link-title">YouTube</div>
+                    <div class="link-description">Geometry Dash and.... that's it</div>
+                </div>
+                <div class="link-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <!-- Email -->
+            <div class="link-card email-card" id="emailCard">
+                <div class="link-icon email-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="link-content">
+                    <div class="link-title">Email</div>
+                    <div class="link-description">Professional contact and collaborations (I never will see your email)</div>
+                </div>
+                <div class="link-arrow">
+                    <i class="fas fa-clone"></i>
+                </div>
+            </div>
+
+            <!-- Discord -->
+            <a href="https://discord.gg/VYWAHY7AaF" target="_blank" class="link-card discord-card">
+                <div class="link-icon discord-icon">
+                    <i class="fab fa-discord"></i>
+                </div>
+                <div class="link-content">
+                    <div class="link-title">Discord</div>
+                    <div class="link-description">Come if you want i don't care</div>
+                </div>
+                <div class="link-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+        </div>
+
+        <footer>
+            <p><span id="current-year"></span> :)</p>
+        </footer>
+    </div>
+
+    <script>
+        // Année en cours
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Fonction pour copier l'email
+        function copyEmailToClipboard() {
+            const email = "viampperaud981@gmail.com";
+            
+            navigator.clipboard.writeText(email).then(() => {
+                const notification = document.getElementById('copyNotification');
+                notification.classList.add('show');
+                
+                const emailCard = document.getElementById('emailCard');
+                const emailArrow = emailCard.querySelector('.link-arrow i');
+                const originalIcon = emailArrow.className;
+                const originalDescription = emailCard.querySelector('.link-description').textContent;
+                
+                emailArrow.className = 'fas fa-check';
+                emailCard.querySelector('.link-description').textContent = 'Email copié ! ' + email;
+                emailCard.style.borderColor = '#2ecc71';
+                
+                setTimeout(() => {
+                    emailArrow.className = originalIcon;
+                    emailCard.querySelector('.link-description').textContent = originalDescription;
+                    emailCard.style.borderColor = '';
+                }, 2000);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+                
+            }).catch(err => {
+                console.error('Erreur de copie: ', err);
+                const textArea = document.createElement('textarea');
+                textArea.value = email;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Email copié: ${email}`);
+            });
+        }
+        
+        // Ajouter l'événement de clic sur la carte email
+        document.getElementById('emailCard').addEventListener('click', copyEmailToClipboard);
+        
+        // Effet au clic sur les autres cartes
+        const otherCards = document.querySelectorAll('a.link-card');
+        otherCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                this.style.transform = 'translateY(-1px) scale(0.995)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+        
+        // Ajouter des points décoratifs aléatoires
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const colors = ['#e74c3c', '#3498db', '#9b59b6', '#2ecc71', '#f1c40f'];
+            
+            for (let i = 0; i < 5; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'decorative-dot';
+                dot.style.left = Math.random() * 90 + 5 + '%';
+                dot.style.top = Math.random() * 90 + 5 + '%';
+                dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                dot.style.opacity = Math.random() * 0.5 + 0.1;
+                dot.style.width = dot.style.height = (Math.random() * 8 + 3) + 'px';
+                body.appendChild(dot);
+            }
+        });
+    </script>
+</body>
+</html>
+
